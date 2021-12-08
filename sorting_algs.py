@@ -1,7 +1,7 @@
 import random
 import sys
 
-sys.setrecursionlimit(10000)
+sys.setrecursionlimit(100000)
 
 # Extra sorts
 def counting_sort(input_array, place_value):

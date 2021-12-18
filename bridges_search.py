@@ -100,6 +100,7 @@ class RandomBridges:
 
     def find_2bridges(self, adj_list, sort_fun):
         self.adj_list = adj_list
+        self.track = self.track
         for i in range(len(adj_list)):
             self.samples.append([-1]*len(adj_list))
         # print(self.samples)

@@ -109,9 +109,10 @@ class RandomBridges:
             for second_key in self.adj_list[first_key]:
                 # if (second_key, first_key) not in self.track:
                 self.edges.append(
-                    [(first_key, second_key), self.samples[first_key][second_key]]
+                    ((first_key, second_key), self.samples[first_key][second_key])
                 )
                     # self.track.append((first_key, second_key))
+        self.edges = list(set(self.edges))
         samples_list = [edge[self.SAMPLE_NUM] for edge in self.edges]
         sorted_args = sort_fun(samples_list)
         cluster_size = 0

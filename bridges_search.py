@@ -51,6 +51,7 @@ class RandomBridges:
     def __init__(self):
         self.adj_list, self.samples = [], []
         self.bridges, self.edges, self.colors, self.history, = [], [], [], []
+        self.track = []
         self.EDGE_NUM = 0
         self.SAMPLE_NUM = 1
 
@@ -105,12 +106,11 @@ class RandomBridges:
         self.launch_sampling()
         for first_key in self.adj_list:
             for second_key in self.adj_list[first_key]:
-                if (second_key, first_key) not in [
-                    edge[self.EDGE_NUM] for edge in self.edges
-                ]:
+                if (second_key, first_key) not in self.track:
                     self.edges.append(
                         [(first_key, second_key), self.samples[first_key][second_key]]
                     )
+                    self.track.append((first_key, second_key))
         samples_list = [edge[self.SAMPLE_NUM] for edge in self.edges]
         sorted_args = sort_fun(samples_list)
         cluster_size = 0

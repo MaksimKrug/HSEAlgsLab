@@ -85,7 +85,7 @@ def bucket_argsort(input_array):
     # get max value and bucket's size
     max_value = max([i[1] for i in input_array])
     array_len = len(input_array)
-    size = array_len
+    size = max_value / array_len + 1
 
     # Create empty buckets
     buckets_list = []

@@ -49,9 +49,8 @@ def compute_bridges_determ(adj_list):
 
 class RandomBridges:
     def __init__(self):
-        self.adj_list, self.samples = [], []
+        self.adj_list, self.samples = [], {}
         self.bridges, self.edges, self.colors, self.history, = [], [], [], []
-        self.track = []
         self.EDGE_NUM = 0
         self.SAMPLE_NUM = 1
 
@@ -88,7 +87,7 @@ class RandomBridges:
     def find_bridges(self, adj_list):
         self.adj_list = adj_list
         for i in range(len(adj_list)):
-            self.samples.append([-1]*len(adj_list))
+            self.samples[i] = {}
         self.launch_sampling()
         for first_key in self.adj_list:
             for second_key in self.adj_list[first_key]:
@@ -102,16 +101,14 @@ class RandomBridges:
         self.adj_list = adj_list
         self.track = self.track
         for i in range(len(adj_list)):
-            self.samples.append([-1]*len(adj_list))
+            self.samples[i] = {}
         # print(self.samples)
         self.launch_sampling()
         for first_key in self.adj_list:
             for second_key in self.adj_list[first_key]:
-                # if (second_key, first_key) not in self.track:
                 self.edges.append(
                     ((first_key, second_key), self.samples[first_key][second_key])
                 )
-                    # self.track.append((first_key, second_key))
         self.edges = list(set(self.edges))
         samples_list = [edge[self.SAMPLE_NUM] for edge in self.edges]
         sorted_args = sort_fun(samples_list)

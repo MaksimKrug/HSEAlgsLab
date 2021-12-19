@@ -79,13 +79,13 @@ def bucket_argsort(input_array):
     # check that graph not empty
     if input_array == []:
         return []
-        
+            
     # convert input array
     input_array = [(i, j) for i, j in enumerate(input_array)]
     # get max value and bucket's size
     max_value = max([i[1] for i in input_array])
     array_len = len(input_array)
-    size = max_value / array_len + 1
+    size = max_value + 1e-6
 
     # Create empty buckets
     buckets_list = []
@@ -106,6 +106,7 @@ def bucket_argsort(input_array):
 
     # Concat all buckets
     output_array = []
+    
     for x in range(len(input_array)):
         output_array = output_array + buckets_list[x]
 

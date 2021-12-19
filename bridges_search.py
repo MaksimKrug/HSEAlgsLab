@@ -1,5 +1,6 @@
-import numpy as np
 import sys
+
+import numpy as np
 
 sys.setrecursionlimit(100000)
 
@@ -51,6 +52,7 @@ class RandomBridges:
     def __init__(self):
         self.adj_list, self.samples = [], {}
         self.bridges, self.edges, self.colors, self.history, = [], [], [], []
+        self.track = []
         self.EDGE_NUM = 0
         self.SAMPLE_NUM = 1
 
@@ -101,16 +103,17 @@ class RandomBridges:
         self.adj_list = adj_list
         for i in range(len(adj_list)):
             self.samples[i] = {}
-        # print(self.samples)
+            self.track.append([])
         self.launch_sampling()
         for first_key in self.adj_list:
             for second_key in self.adj_list[first_key]:
-                self.edges.append(
-                    ((first_key, second_key), self.samples[first_key][second_key])
-                )
-        self.edges = list(set(self.edges))
-        samples_list = [edge[self.SAMPLE_NUM] for edge in self.edges]
-        sorted_args = sort_fun(samples_list)
+                if first_key not in self.track[second_key]:                    
+                    self.edges.append(
+                        [(first_key, second_key), self.samples[first_key][second_key]]
+                    )
+                    self.track[first_key].append(second_key)
+        samples_list = [edge[self.SAMPLE_NUM] for edge in self.edges] 
+        sorted_args = sort_fun(samples_list) 
         cluster_size = 0
         current_cluster = 0
         for i in range(len(sorted_args) - 1):

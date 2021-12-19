@@ -67,25 +67,20 @@ def radix_argsort(input_array):
 
 
 def bucket_argsort(input_array):
-    def insertion_sort(input_array):
-        for i in range(1, len(input_array)):
-            value = input_array[i]
+    def insertion_sort(input_bucket):
+        for i in range(1, len(input_bucket)):
+            value = input_bucket[i]
             j = i - 1
-            while j >= 0 and value < input_array[j]:
-                input_array[j + 1] = input_array[j]
+            while j >= 0 and value[1] < input_bucket[j][1]:
+                input_bucket[j + 1] = input_bucket[j]
                 j = j - 1
-            input_array[j + 1] = value
+            input_bucket[j + 1] = value
             
-    # check that graph not empty
-    if input_array == []:
-        return []
             
-    # convert input array
-    input_array = [(i, j) for i, j in enumerate(input_array)]
-    # get max value and bucket's size
-    max_value = max([i[1] for i in input_array])
+    # statistics
     array_len = len(input_array)
-    size = max_value + 1e-6
+    min_, max_ = min(input_array), max(input_array)
+    input_array = [(i, j) for i, j in enumerate(input_array)]
 
     # Create empty buckets
     buckets_list = []
@@ -94,23 +89,19 @@ def bucket_argsort(input_array):
 
     # Put elements into the buckets
     for i in range(array_len):
-        j = int(input_array[i][1] / size)
-        if j != len(input_array):
-            buckets_list[j].append(input_array[i])
+        item_ = input_array[i]
+        normalized = (item_[1] - min_) / (max_ - min_)
+        bucket_number = int(array_len * normalized)
+        if bucket_number < array_len:
+            buckets_list[bucket_number].append(item_)
         else:
-            buckets_list[len(input_array) - 1].append(input_array[i])
-
+            buckets_list[array_len-1].append(item_)
+    
     # Sort each bucket
     for i in range(array_len):
         insertion_sort(buckets_list[i])
 
-    # Concat all buckets
-    output_array = []
-    
-    for x in range(len(input_array)):
-        output_array = output_array + buckets_list[x]
-
-    return [i[0] for i in output_array] 
+    return [j[0] for i in buckets_list for j in i] 
 
 
 # QUICKSORT

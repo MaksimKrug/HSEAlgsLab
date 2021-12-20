@@ -46,24 +46,24 @@ def insertion_sort(input_array):
 # поразрядная сортировка
 # возвращает итоговую перестановку эелементов массива A
 # для того, чтобы можно было переставить элементы в любом другом массиве
-def radix_argsort(input_array):
-    # Step 1: find maximum element
-    maximum_element = max(input_array)
+# def radix_argsort(input_array):
+#     # Step 1: find maximum element
+#     maximum_element = max(input_array)
 
-    # Step 2: find number of digits in maximum element
-    D = len(str(maximum_element))
+#     # Step 2: find number of digits in maximum element
+#     D = len(str(maximum_element))
 
-    # Step 3: init place_value
-    place_value = 1
+#     # Step 3: init place_value
+#     place_value = 1
 
-    # Step 4: apply counting sort to each D
-    output_array = input_array
-    while D > 0:
-        output_array = counting_sort(output_array, place_value)
-        place_value *= 10
-        D -= 1
+#     # Step 4: apply counting sort to each D
+#     output_array = input_array
+#     while D > 0:
+#         output_array = counting_sort(output_array, place_value)
+#         place_value *= 10
+#         D -= 1
 
-    return output_array
+#     return output_array
 
 
 def bucket_argsort(input_array):
@@ -76,7 +76,10 @@ def bucket_argsort(input_array):
                 j = j - 1
             input_bucket[j + 1] = value
             
-            
+    # check taht not empty
+    if input_array == []:
+        return []
+        
     # statistics
     array_len = len(input_array)
     min_, max_ = min(input_array), max(input_array)
@@ -90,7 +93,7 @@ def bucket_argsort(input_array):
     # Put elements into the buckets
     for i in range(array_len):
         item_ = input_array[i]
-        normalized = (item_[1] - min_) / (max_ - min_)
+        normalized = (item_[1] - min_) / (max_ - min_ + 1e-6)
         bucket_number = int(array_len * normalized)
         if bucket_number < array_len:
             buckets_list[bucket_number].append(item_)
@@ -138,7 +141,11 @@ def _insertion_sort(input_array, start, end):
 def _quicksort(array, start, end):
     while (end - start) >= 50:
         p = _partition(array, start, end)
-        _quicksort(array, start, p - 1)
-        start = p + 1
+        if (p - start) <= (end - p - 1):
+            _quicksort(array, start, p - 1)
+            start = p + 1
+        else:
+            _quicksort(array, p-1, end)
+            end = p - 1
     _insertion_sort(array, start, end)
     return array
